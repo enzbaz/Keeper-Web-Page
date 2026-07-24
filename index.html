@@ -115,14 +115,17 @@
       /* Contraste relevé (accessibilité) : t2 sert au texte lisible, t3 au décoratif */
       --t2:          rgba(235,235,235,0.62);
       --t3:          rgba(235,235,235,0.40);
-      /* Vert forêt (préférence utilisateur) — un hover plus clair pour le web */
+      /* Vert forêt (préférence utilisateur) — un hover plus clair pour le web.
+         U18 : --green-h aligné sur la valeur de l'app (#4AA377, D9) — deux teintes
+         de hover pour le même vert n'avaient pas de raison d'être. */
       --green:       #3D9068;
-      --green-h:     #4CA87B;
+      --green-h:     #4AA377;
       --green-dim:   rgba(61,144,104,0.11);
       --green-border:rgba(61,144,104,0.26);
       --green-glow:  rgba(61,144,104,0.18);
-      /* Rouge — bouton d'extinction (comme dans l'app) */
-      --red:         #E5484D;
+      /* Rouge — bouton d'extinction (comme dans l'app). U18 : aligné sur la valeur
+         de l'app (#E5534B, D9) — l'app garde son rouge existant (D3). */
+      --red:         #E5534B;
       --red-h:       #F0605F;
       --red-glow:    rgba(229,72,77,0.5);
       /* Vert VIF — réservé aux moments "punch" (produit, accent titre, glow CTA) */
@@ -303,10 +306,29 @@
     .nav-cta:hover::after { transform: translateX(120%); }
     /* L'appui « enfonce » le bouton : retour tactile immédiat */
     .nav-cta:active { transform: translateY(0); transition-duration: .08s; }
-    /* Sur mobile, on masque les liens d'ancrage — on garde logo + CTA */
+    /* Bascule FR/EN — affiche la langue vers laquelle on bascule, pas la langue active.
+       Placée après le CTA : marge à gauche pour la détacher visuellement du bouton vert. */
+    .lang-toggle {
+      color:         var(--t2);
+      font-size:     12.5px;
+      font-weight:   600;
+      font-family:   inherit;
+      background:    transparent;
+      border:        1px solid var(--border2);
+      border-radius: 7px;
+      padding:       6px 11px;
+      margin-left:   10px;
+      cursor:        pointer;
+      transition:    color .15s, background .15s, border-color .15s;
+    }
+    .lang-toggle:hover { color: var(--t1); background: var(--s2); }
+    /* Sur mobile, on masque les liens d'ancrage — on garde logo + CTA + bascule langue */
     @media (max-width: 680px) {
       .nav-links .nav-link { display: none; }
       .nav-cta { margin-left: 0; }
+      /* La nav est déjà à l'étroit sur petit mobile (logo + CTA) : la bascule
+         reste la plus compacte possible pour ne pas pousser le CTA hors écran */
+      .lang-toggle { padding: 5px 7px; font-size: 11px; margin-left: 6px; }
     }
 
 
@@ -1382,6 +1404,15 @@
     }
     .wl-input:focus { border-color: var(--green-h); }
     .wl-input::placeholder { color: var(--t3); }
+    /* U10 : message texte sous le champ, en plus de la bordure rouge — l'erreur ne
+       doit pas reposer sur la seule couleur (accessibilité). Masqué par défaut. */
+    .wl-error {
+      display: none;
+      font-size: 12px; color: var(--red);
+      max-width: 440px; margin: 8px auto 0;
+      text-align: left; position: relative; z-index: 1;
+    }
+    .wl-error.visible { display: block; }
     .wl-btn {
       background: var(--green);
       color: #f4f4f4;
@@ -1954,10 +1985,12 @@
         <span class="wordmark">Keeper</span>
       </a>
       <div class="nav-links">
-        <a href="#demo"     class="nav-link">Démo</a>
-        <a href="#features-detail" class="nav-link">Fonctionnalités</a>
-        <a href="#how"      class="nav-link">Comment ça marche</a>
-        <a href="#sync" class="nav-cta">Être prévenu</a>
+        <a href="#demo"     class="nav-link" data-i18n="nav.demo">Démo</a>
+        <a href="#features-detail" class="nav-link" data-i18n="nav.features">Fonctionnalités</a>
+        <a href="#how"      class="nav-link" data-i18n="nav.how">Comment ça marche</a>
+        <a href="https://github.com/enzbaz/Keeper-Web-Page/releases/latest/download/Keeper-Setup.exe" class="nav-cta" data-i18n="nav.download">Télécharger</a>
+        <!-- Bascule FR/EN : langue du navigateur détectée au 1er chargement, override mémorisé ensuite -->
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch language / Changer de langue"></button>
       </div>
     </div>
   </nav>
@@ -1970,31 +2003,31 @@
     <div class="hero-inner">
      <div class="hero-copy">
 
-    <div class="hero-badge reveal in">
+    <div class="hero-badge reveal in" data-i18n-html="hero.badge">
       <span class="badge-dot" aria-hidden="true"></span>
       Windows 10 / 11 &nbsp;·&nbsp; Gratuit &nbsp;·&nbsp; 100 % local
     </div>
 
     <!-- V9 : chaque mot entre en cascade (spans .hw), l'em vif garde son shimmer -->
-    <h1 class="reveal in d1"><span class="hw">Redémarre</span> <span class="hw">ton</span> <span class="hw">PC</span><br><span class="hw">sans</span> <span class="hw">perdre</span> <span class="hw"><em>le fil</em></span></h1>
+    <h1 class="reveal in d1" data-i18n-html="hero.h1"><span class="hw">Redémarre</span> <span class="hw">ton</span> <span class="hw">PC</span><br><span class="hw">sans</span> <span class="hw">perdre</span> <span class="hw"><em>le fil</em></span></h1>
 
-    <p class="hero-sub reveal in d2">
+    <p class="hero-sub reveal in d2" data-i18n="hero.sub">
       Keeper capture toutes tes fenêtres ouvertes et leurs positions, au moment précis où tu fermes.
       Un clic pour fermer, un clic pour tout retrouver.
     </p>
 
     <div class="hero-ctas reveal in d3">
-      <a href="#sync" class="btn-primary">Être prévenu au lancement</a>
+      <a href="https://github.com/enzbaz/Keeper-Web-Page/releases/latest/download/Keeper-Setup.exe" class="btn-primary" data-i18n="hero.cta1">Télécharger pour Windows</a>
       <a href="#demo" class="btn-ghost">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        Voir la démo
+        <span data-i18n="hero.cta2">Voir la démo</span>
       </a>
     </div>
 
      </div><!-- /hero-copy -->
 
     <!-- FENÊTRE PRODUIT — l'UI Keeper visible dès le hero -->
-    <div class="hero-shot reveal in d4" role="img" aria-label="Aperçu de l'application Keeper avec ses sessions sauvegardées">
+    <div class="hero-shot reveal in d4" role="img" aria-label="Aperçu de l'application Keeper avec ses sessions sauvegardées" data-i18n-aria-label="hero.shotAria">
       <div class="hs-window">
         <div class="hs-bar">
           <div class="hs-dots"><span></span><span></span><span></span></div>
@@ -2011,8 +2044,8 @@
           <div class="hs-card on">
             <div class="hs-ico"><div class="stack-mark"><div class="win win-3"></div><div class="win win-2"></div><div class="win win-1"><div class="win-bar"></div></div></div></div>
             <div class="hs-info">
-              <div class="hs-name">Travail mardi soir</div>
-              <div class="hs-meta">Aujourd'hui, 22:30 · 4 applications</div>
+              <div class="hs-name" data-i18n="mock.session1.name">Travail mardi soir</div>
+              <div class="hs-meta" data-i18n="mock.session1.meta">Aujourd'hui, 22:30 · 4 applications</div>
             </div>
             <div class="hs-pips">
               <span class="hs-pip ch">C</span><span class="hs-pip vs">VS</span><span class="hs-pip fg">F</span><span class="hs-pip nt">N</span>
@@ -2024,7 +2057,7 @@
             <div class="hs-ico"><div class="stack-mark"><div class="win win-3"></div><div class="win win-2"></div><div class="win win-1"><div class="win-bar"></div></div></div></div>
             <div class="hs-info">
               <div class="hs-name">Weekly Projects </div>
-              <div class="hs-meta">Hier, 18:12 · 3 applications</div>
+              <div class="hs-meta" data-i18n="mock.session2.meta">Hier, 18:12 · 3 applications</div>
             </div>
             <div class="hs-pips">
               <span class="hs-pip vs">VS</span><span class="hs-pip ch">C</span><span class="hs-pip nt">N</span>
@@ -2035,8 +2068,8 @@
           <div class="hs-card dim">
             <div class="hs-ico"><div class="stack-mark"><div class="win win-3"></div><div class="win win-2"></div><div class="win win-1"><div class="win-bar"></div></div></div></div>
             <div class="hs-info">
-              <div class="hs-name">Finances Q2</div>
-              <div class="hs-meta">Lundi, 11:45 · 2 applications</div>
+              <div class="hs-name" data-i18n="mock.session3.name">Finances Q2</div>
+              <div class="hs-meta" data-i18n="mock.session3.meta">Lundi, 11:45 · 2 applications</div>
             </div>
             <div class="hs-pips">
               <span class="hs-pip ex">X</span><span class="hs-pip ch">C</span>
@@ -2051,10 +2084,10 @@
   </section>
 
   <!-- ════ BANDE DE CONFIANCE — faits vérifiables, pas de stats inventées ════ -->
-  <!-- Produit pas encore lancé : aucune métrique d'usage à afficher. On montre plutôt
+  <!-- Pas encore d'historique d'usage au lancement : aucune métrique inventée. On montre plutôt
        des garanties factuelles (licence, apps ciblées, confidentialité). -->
   <div class="marquee-wrap reveal">
-    <p class="marquee-label">Conçu pour ton setup</p>
+    <p class="marquee-label" data-i18n="marquee.label">Conçu pour ton setup</p>
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
         <div class="marquee-group">
@@ -2069,6 +2102,16 @@
           <span class="app-chip"><span class="app-dot" style="background:#217346"></span>Excel</span>
           <span class="app-chip"><span class="app-dot" style="background:#31A8FF"></span>Photoshop</span>
           <span class="app-chip"><span class="app-dot" style="background:#00CED1"></span>Zoom</span>
+          <span class="app-chip"><span class="app-dot" style="background:#2B579A"></span>Word</span>
+          <span class="app-chip"><span class="app-dot" style="background:#D24726"></span>PowerPoint</span>
+          <span class="app-chip"><span class="app-dot" style="background:#6264A7"></span>Teams</span>
+          <span class="app-chip"><span class="app-dot" style="background:#0078D7"></span>Edge</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF7139"></span>Firefox</span>
+          <span class="app-chip"><span class="app-dot" style="background:#25D366"></span>WhatsApp</span>
+          <span class="app-chip"><span class="app-dot" style="background:#26A5E4"></span>Telegram</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF9A00"></span>Illustrator</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF6C37"></span>Postman</span>
+          <span class="app-chip"><span class="app-dot" style="background:#7C3AED"></span>Obsidian</span>
           <span class="app-chip"><span class="app-dot" style="background:#3D9068"></span>Windows 10/11</span>
         </div>
         <!-- Doublon exact du groupe ci-dessus : c'est lui qui prend la place du premier
@@ -2085,6 +2128,16 @@
           <span class="app-chip"><span class="app-dot" style="background:#217346"></span>Excel</span>
           <span class="app-chip"><span class="app-dot" style="background:#31A8FF"></span>Photoshop</span>
           <span class="app-chip"><span class="app-dot" style="background:#00CED1"></span>Zoom</span>
+          <span class="app-chip"><span class="app-dot" style="background:#2B579A"></span>Word</span>
+          <span class="app-chip"><span class="app-dot" style="background:#D24726"></span>PowerPoint</span>
+          <span class="app-chip"><span class="app-dot" style="background:#6264A7"></span>Teams</span>
+          <span class="app-chip"><span class="app-dot" style="background:#0078D7"></span>Edge</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF7139"></span>Firefox</span>
+          <span class="app-chip"><span class="app-dot" style="background:#25D366"></span>WhatsApp</span>
+          <span class="app-chip"><span class="app-dot" style="background:#26A5E4"></span>Telegram</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF9A00"></span>Illustrator</span>
+          <span class="app-chip"><span class="app-dot" style="background:#FF6C37"></span>Postman</span>
+          <span class="app-chip"><span class="app-dot" style="background:#7C3AED"></span>Obsidian</span>
           <span class="app-chip"><span class="app-dot" style="background:#3D9068"></span>Windows 10/11</span>
         </div>
       </div>
@@ -2093,28 +2146,28 @@
 
   <!-- ════ DÉMO INTERACTIVE ════ -->
   <section class="demo" id="demo">
-    <p class="section-eyebrow reveal">En action</p>
-    <h2 class="reveal d1">Un clic. Tout revient.</h2>
-    <p class="demo-sub reveal d2">
-      Clique sur <strong style="color:var(--green-h)">Save&nbsp;&amp;&nbsp;Close</strong> pour tout refermer d'un coup. 
+    <p class="section-eyebrow reveal" data-i18n="demo.eyebrow">En action</p>
+    <h2 class="reveal d1" data-i18n="demo.h2">Un clic. Tout revient.</h2>
+    <p class="demo-sub reveal d2" data-i18n-html="demo.sub">
+      Clique sur <strong style="color:var(--green-h)">Save&nbsp;&amp;&nbsp;Close</strong> pour <strong>sauvegarder tes fenêtres</strong> ouvertes à l'écran et les <strong>fermer en un clic</strong>.
       Clique sur <strong style="color:var(--green-h)">Restore</strong> : Keeper rouvre toutes tes
-      applications à leur place exacte. 
+      applications à leur place exacte.
     </p>
 
     <!-- Le faux bureau -->
     <div class="demo-screen reveal d2" id="demoScreen" role="img"
-         aria-label="Démonstration : un bureau Windows dont les fenêtres s'ouvrent au clic sur Restore">
+         aria-label="Démonstration : un bureau Windows dont les fenêtres s'ouvrent au clic sur Restore" data-i18n-aria-label="demo.screenAria">
 
-      <span class="desk-hint">Bureau vide — clique sur « Restore »</span>
+      <span class="desk-hint" data-i18n="demo.deskHint">Bureau vide — clique sur « Restore »</span>
 
       <!-- Toast de confirmation -->
-      <div class="demo-toast" id="demoToast">✓ Session sauvegardée</div>
+      <div class="demo-toast" id="demoToast" data-i18n="demo.toast">✓ Session sauvegardée</div>
 
       <!-- Fenêtre 1 : Chrome -->
       <div class="app-win w1">
         <div class="win-titlebar">
           <div class="win-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="win-title">Chrome — 23 onglets</span>
+          <span class="win-title" data-i18n="mock.chromeTitle">Chrome — 23 onglets</span>
         </div>
         <div class="win-accent acc-chrome"></div>
         <div class="win-body">
@@ -2191,7 +2244,7 @@
       </button>
     </div>
     <!-- Légende qui guide la séquence Save & Close → Restore -->
-    <p class="demo-guide" id="demoGuide" aria-live="polite">① Clique sur « Save&nbsp;&amp;&nbsp;Close » pour tout fermer</p>
+    <p class="demo-guide" id="demoGuide" aria-live="polite" data-i18n-html="demo.guideClose">① Clique sur « Save&nbsp;&amp;&nbsp;Close » pour tout fermer</p>
   </section>
 
 
@@ -2201,9 +2254,9 @@
     <!-- Row 1 : EXTINCTION 1 BOUTON -->
     <div class="feat-row reverse">
       <div class="feat-copy reveal">
-        <div class="feat-tag"><svg><use href="#i-power"/></svg> Extinction en 1 clic</div>
-        <h3>Sauvegarde, ferme,<br>éteint. Un seul bouton.</h3>
-        <p>Fini le PC laissé en veille par flemme. Keeper sauvegarde ta session, ferme proprement toutes tes apps et éteint la machine — d'un seul geste.</p>
+        <div class="feat-tag"><svg><use href="#i-power"/></svg> <span data-i18n="feat.power.tag">Extinction en 1 clic</span></div>
+        <h3 data-i18n-html="feat.power.h3">Sauvegarde, ferme,<br>éteint. Un seul bouton.</h3>
+        <p data-i18n="feat.power.p">Fini le PC laissé en veille par flemme. Keeper sauvegarde ta session, ferme proprement toutes tes apps et éteint la machine — d'un seul geste.</p>
       </div>
       <!-- Vignette : les fenêtres se ferment puis l'écran s'éteint -->
       <div class="feat-stage reveal d1">
@@ -2214,7 +2267,7 @@
             <div class="app-win w1">
               <div class="win-titlebar">
                 <div class="win-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-                <span class="win-title">Chrome — 23 onglets</span>
+                <span class="win-title" data-i18n="mock.chromeTitle">Chrome — 23 onglets</span>
               </div>
               <div class="win-accent acc-chrome"></div>
               <div class="win-body">
@@ -2266,14 +2319,14 @@
             <!-- Overlay écran éteint -->
             <div class="p-off">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
-              <span>PC éteint</span>
+              <span data-i18n="feat.power.off">PC éteint</span>
             </div>
 
           </div>
-          <button class="p-button" type="button" aria-label="Éteindre le PC (démonstration)">
+          <button class="p-button" type="button" aria-label="Éteindre le PC (démonstration)" data-i18n-aria-label="feat.power.btnAria">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
           </button>
-          <span class="p-hint">Clique pour éteindre</span>
+          <span class="p-hint" data-i18n="feat.power.hint">Clique pour éteindre</span>
         </div>
       </div>
     </div>
@@ -2281,9 +2334,12 @@
     <!-- Row 2 : FENÊTRES BIEN PLACÉES -->
     <div class="feat-row">
       <div class="feat-copy reveal">
-        <div class="feat-tag"><svg><use href="#i-monitor"/></svg> Placement exact</div>
-        <h3>Chaque fenêtre<br>à sa place. Au pixel près.</h3>
-        <p>Keeper mémorise la position et la taille de chaque fenêtre, écran par écran. À la restauration, tout se remet exactement là où c'était — même en multi-moniteur.</p>
+        <div class="feat-tag"><svg><use href="#i-monitor"/></svg> <span data-i18n="feat.place.tag">Placement exact</span></div>
+        <h3 data-i18n-html="feat.place.h3">Chaque fenêtre<br>à sa place. Au pixel près.</h3>
+        <!-- U20 : formulation adoucie — la restauration RECENTRE les fenêtres si
+             l'agencement d'écrans a changé, elle ne les replace pas toujours au pixel
+             près (cf. session_restore._screen_layout_changed côté core). -->
+        <p data-i18n="feat.place.p">Keeper mémorise la position et la taille de chaque fenêtre, écran par écran. À la restauration, tout est repositionné exactement — et recentré intelligemment si ton setup d'écrans a changé.</p>
       </div>
       <!-- Vignette : les fenêtres se calent sur deux moniteurs -->
       <div class="feat-stage reveal d1" aria-hidden="true">
@@ -2320,9 +2376,12 @@
     <!-- Row 3 : TEMPLATES PARTAGÉS -->
     <div class="feat-row reverse">
       <div class="feat-copy reveal">
-        <div class="feat-tag"><svg><use href="#i-link"/></svg> Templates partagés</div>
-        <h3>Une config prête.<br>Partagée en un fichier.</h3>
-        <p>Exporte une session type — les bonnes apps, déjà positionnées — en un fichier. Partage-le, chacun l'importe et démarre pareil.</p>
+        <div class="feat-tag"><svg><use href="#i-link"/></svg> <span data-i18n="feat.tpl.tag">Templates partagés</span></div>
+        <!-- U19 : feature pas encore livrée (aucun export/import dans l'app) — badge
+             « Bientôt », même composant que la section Sync (.wl-badge), texte au futur. -->
+        <span class="wl-badge" style="margin-left:8px"><svg style="width:13px;height:13px"><use href="#i-sync"/></svg> <span data-i18n="badge.soon">Bientôt</span></span>
+        <h3 data-i18n-html="feat.tpl.h3">Une config prête.<br>Partagée en un fichier.</h3>
+        <p data-i18n="feat.tpl.p">Tu pourras exporter une session type — les bonnes apps, déjà positionnées — en un fichier. Partage-le, chacun l'importera et démarrera pareil.</p>
       </div>
       <!-- Vignette : un template se duplique vers deux personnes -->
       <div class="feat-stage reveal d1" aria-hidden="true">
@@ -2341,20 +2400,20 @@
     <!-- Row 4 : NOTES (fonctionnalité secondaire → placée en fin de section) -->
     <div class="feat-row">
       <div class="feat-copy reveal">
-        <div class="feat-tag"><svg><use href="#i-note"/></svg> Notes de session</div>
-        <h3>Une pensée avant de fermer ?<br>Note-la.</h3>
-        <p>Attache un mémo à chaque session. Au moment de reprendre, tu retrouves le contexte exact — où tu en étais, quoi faire ensuite — sans avoir à te souvenir de rien.</p>
+        <div class="feat-tag"><svg><use href="#i-note"/></svg> <span data-i18n="feat.notes.tag">Notes de session</span></div>
+        <h3 data-i18n-html="feat.notes.h3">Une pensée avant de fermer ?<br>Note-la.</h3>
+        <p data-i18n="feat.notes.p">Attache un mémo ou des notes à chaque session. Au moment de reprendre, tu retrouves le contexte exact : où tu en étais, quoi faire ensuite.</p>
       </div>
       <!-- Vignette : une note qui se tape toute seule -->
       <div class="feat-stage reveal d1" aria-hidden="true">
         <div class="n-card">
           <div class="n-head">
             <span class="n-mark"><span></span><span></span><span></span></span>
-            <span class="n-title">Travail mardi soir</span>
+            <span class="n-title" data-i18n="mock.session1.name">Travail mardi soir</span>
           </div>
           <div class="n-note">
             <span class="n-note-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:2.6cqw;height:2.6cqw;display:inline-block;vertical-align:-0.4cqw;"><use href="#i-note"/></svg> Note</span>
-            <span class="n-note-line">Finir le bug 42 — revoir le timeout WM_CLOSE</span>
+            <span class="n-note-line" data-i18n="mock.noteLine">Finir le bug 42, revoir le timeout WM_CLOSE</span>
           </div>
         </div>
       </div>
@@ -2365,9 +2424,9 @@
 
   <!-- ════ COMPARAISON ════ -->
   <section class="compare" id="compare">
-    <p class="section-eyebrow reveal">Comparaison</p>
-    <h2 class="reveal d1">Pourquoi Keeper ?</h2>
-    <p class="compare-sub reveal d1">Le marché Windows est bloqué sur des outils datés ou abandonnés. Keeper est le seul à cocher toutes les cases.</p>
+    <p class="section-eyebrow reveal" data-i18n="compare.eyebrow">Comparaison</p>
+    <h2 class="reveal d1" data-i18n="compare.h2">Pourquoi Keeper ?</h2>
+    <p class="compare-sub reveal d1" data-i18n="compare.sub">Le marché Windows est bloqué sur des outils datés ou abandonnés. Keeper est le seul à cocher toutes les cases.</p>
 
     <div class="compare-scroll reveal d2">
       <table class="compare-table">
@@ -2382,60 +2441,60 @@
         </thead>
         <tbody>
           <tr>
-            <td>Capture ce qui est réellement ouvert au moment T</td>
-            <td class="c-txt">Template pré-défini</td>
-            <td class="c-txt">Profil pré-défini</td>
-            <td class="c-txt">Partiel</td>
-            <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg> Snapshot</td>
+            <td data-i18n="compare.r1.feat">Capture ce qui est réellement ouvert au moment T</td>
+            <td class="c-txt" data-i18n="compare.r1.c1">Template pré-défini</td>
+            <td class="c-txt" data-i18n="compare.r1.c2">Profil pré-défini</td>
+            <td class="c-txt" data-i18n="compare.r1.c3">Partiel</td>
+            <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg> <span data-i18n="compare.r1.keeper">Snapshot</span></td>
           </tr>
           <tr>
-            <td>Ferme proprement toutes les apps</td>
+            <td data-i18n="compare.r2.feat">Ferme proprement toutes les apps</td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>Éteint le PC dans la foulée</td>
+            <td data-i18n="compare.r3.feat">Éteint le PC dans la foulée</td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-txt">—</td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>Note de contexte attachée à la session</td>
+            <td data-i18n="compare.r4.feat">Note de contexte attachée à la session</td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>Alerte si travail non sauvegardé</td>
+            <td data-i18n="compare.r5.feat">Alerte si travail non sauvegardé</td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>Snapshot auto avant un update Windows</td>
+            <td data-i18n="compare.r6.feat">Snapshot auto avant un update Windows</td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="c-no"><svg><use href="#i-x"/></svg></td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>100 % local, aucun compte</td>
+            <td data-i18n="compare.r7.feat">100 % local, aucun compte</td>
             <td class="c-yes"><svg><use href="#i-check"/></svg></td>
-            <td class="c-txt">Compte requis</td>
+            <td class="c-txt" data-i18n="compare.r7.c2">Compte requis</td>
             <td class="c-yes"><svg><use href="#i-check"/></svg></td>
             <td class="col-keeper c-yes c-keeper"><svg><use href="#i-check"/></svg></td>
           </tr>
           <tr>
-            <td>Prix</td>
-            <td class="c-txt">Gratuit</td>
-            <td class="c-txt">~20 $/an</td>
-            <td class="c-txt">Inclus</td>
-            <td class="col-keeper c-txt c-keeper">Gratuit</td>
+            <td data-i18n="compare.r8.feat">Prix</td>
+            <td class="c-txt" data-i18n="compare.r8.c1">Gratuit</td>
+            <td class="c-txt" data-i18n="compare.r8.c2">~20 $/an</td>
+            <td class="c-txt" data-i18n="compare.r8.c3">Inclus</td>
+            <td class="col-keeper c-txt c-keeper" data-i18n="compare.r8.keeper">Gratuit</td>
           </tr>
         </tbody>
       </table>
@@ -2445,23 +2504,23 @@
 
   <!-- ════ HOW IT WORKS ════ -->
   <section class="how" id="how">
-    <p class="section-eyebrow reveal">Comment ça marche</p>
-    <h2 class="reveal d1">Simple comme bonjour.</h2>
+    <p class="section-eyebrow reveal" data-i18n="how.eyebrow">Comment ça marche</p>
+    <h2 class="reveal d1" data-i18n="how.h2">Simple comme bonjour.</h2>
     <div class="steps">
       <div class="step reveal">
         <div class="step-num">01</div>
-        <div class="step-title">Sauvegarde ta session</div>
-        <p class="step-desc">Clique sur « Save & Close ». Keeper capture toutes tes fenêtres et leurs positions, puis ferme tout proprement.</p>
+        <div class="step-title" data-i18n="how.step1.title">Sauvegarde ta session</div>
+        <p class="step-desc" data-i18n="how.step1.desc">Clique sur « Save & Close ». Keeper capture toutes tes fenêtres et leurs positions, puis ferme tout proprement.</p>
       </div>
       <div class="step reveal d1">
         <div class="step-num">02</div>
-        <div class="step-title">Éteins ou redémarre</div>
-        <p class="step-desc">Coupe vraiment ta machine — plus besoin de la laisser en veille. Ton contexte de travail est en sécurité, stocké en local.</p>
+        <div class="step-title" data-i18n="how.step2.title">Éteins ou redémarre</div>
+        <p class="step-desc" data-i18n="how.step2.desc">Coupe vraiment ta machine — plus besoin de la laisser en veille. Ton contexte de travail est en sécurité, stocké en local.</p>
       </div>
       <div class="step reveal d2">
         <div class="step-num">03</div>
-        <div class="step-title">Rouvre tout en un clic</div>
-        <p class="step-desc">Une fois ton PC redémarré, tu relances Keeper et cliques sur « Restore » : l'ensemble de tes fenêtres revient à sa position exacte. Ton environnement de travail, intact.</p>
+        <div class="step-title" data-i18n="how.step3.title">Rouvre tout en un clic</div>
+        <p class="step-desc" data-i18n="how.step3.desc">Une fois ton PC redémarré, tu relances Keeper et cliques sur « Restore » : l'ensemble de tes fenêtres revient à sa position exacte. Ton environnement de travail, intact.</p>
       </div>
     </div>
   </section>
@@ -2469,25 +2528,27 @@
 
   <!-- ════ WAITLIST — painted door Sync multi-PC ════ -->
   <section class="waitlist reveal" id="sync">
-    <span class="wl-badge"><svg style="width:13px;height:13px"><use href="#i-sync"/></svg> Bientôt</span>
-    <h2>Sync multi-PC</h2>
-    <p>Retrouve tes sessions sur tous tes postes, automatiquement. On construit la synchro cloud (chiffrée, optionnelle) — laisse ton email pour être prévenu au lancement.</p>
+    <span class="wl-badge"><svg style="width:13px;height:13px"><use href="#i-sync"/></svg> <span data-i18n="badge.soon">Bientôt</span></span>
+    <h2 data-i18n="wl.h2">Sync multi-PC</h2>
+    <p data-i18n="wl.p">Retrouve tes sessions sur tous tes postes, automatiquement. On construit la synchro cloud (chiffrée, optionnelle) — laisse ton email pour être prévenu au lancement.</p>
 
     <!-- Painted door : capture front uniquement. À câbler à Tally / Formspree / Gumroad. -->
     <div class="wl-form">
-      <input class="wl-input" type="email" id="wlEmail" placeholder="ton@email.com" aria-label="Ton adresse email" autocomplete="email">
-      <button class="wl-btn" id="wlBtn" type="button">Rejoindre la waitlist</button>
+      <input class="wl-input" type="email" id="wlEmail" placeholder="ton@email.com" aria-label="Ton adresse email" autocomplete="email" data-i18n-placeholder="form.emailPlaceholder" data-i18n-aria-label="form.emailAria">
+      <button class="wl-btn" id="wlBtn" type="button" data-i18n="wl.btn">Rejoindre la waitlist</button>
     </div>
+    <!-- U10 : erreur textuelle (pas seulement la bordure rouge) — masquée par défaut, affichée par le JS -->
+    <p class="wl-error" id="wlEmailError" role="status" data-i18n="form.emailInvalid">Adresse email invalide</p>
     <!-- Consentement RGPD (T4) : non pré-coché, requis. Le JS bloque l'envoi sans coche. -->
     <label class="consent-check" for="wlConsent">
       <input type="checkbox" id="wlConsent" required>
-      <span>J'accepte que mon email soit utilisé pour m'informer du lancement de Keeper (voir la <a href="privacy.html">politique de confidentialité</a>).</span>
+      <span data-i18n-html="wl.consent">J'accepte que mon email soit utilisé pour m'informer du lancement de la sync multi-PC (voir la <a href="privacy.html">politique de confidentialité</a>).</span>
     </label>
-    <p class="wl-note">Zéro spam. Un seul email, au lancement de la sync.</p>
+    <p class="wl-note" data-i18n="wl.note">Zéro spam. Un seul email, au lancement de la sync.</p>
 
     <div class="wl-success" role="status" aria-live="polite">
       <svg><use href="#i-check"/></svg>
-      Merci ! Tu seras prévenu·e dès que la sync est prête.
+      <span data-i18n="wl.success">Merci ! Tu seras prévenu·e dès que la sync est prête.</span>
     </div>
   </section>
 
@@ -2495,58 +2556,58 @@
   <!-- ════ FAQ ════ -->
   <section class="faq" id="faq">
     <p class="section-eyebrow reveal">FAQ</p>
-    <h2 class="reveal d1">Les questions qu'on nous pose.</h2>
+    <h2 class="reveal d1" data-i18n="faq.h2">Les questions qu'on nous pose.</h2>
 
     <details class="faq-item reveal">
-      <summary>Keeper est-il vraiment gratuit ? <svg class="chev"><use href="#i-chevron"/></svg></summary>
-      <p class="faq-answer">Oui. Keeper est entièrement gratuit : tu le télécharges et tu l'utilises sans limite, sans compte. Une option payante <strong>Sync multi-PC</strong> arrivera plus tard, mais tout le cœur de l'app reste gratuit.</p>
+      <summary><span data-i18n="faq.free.q">Keeper est-il vraiment gratuit ?</span> <svg class="chev"><use href="#i-chevron"/></svg></summary>
+      <p class="faq-answer" data-i18n-html="faq.free.a">Oui. Keeper est entièrement gratuit : tu le télécharges et tu l'utilises sans limite, sans compte. Une option payante <strong>Sync multi-PC</strong> arrivera plus tard, mais tout le cœur de l'app reste gratuit.</p>
     </details>
 
     <details class="faq-item reveal">
-      <summary>Mes données partent-elles quelque part ? <svg class="chev"><use href="#i-chevron"/></svg></summary>
-      <p class="faq-answer">Non. Tout est 100 % local : tes sessions sont stockées en fichiers JSON sur ta machine. Aucun compte, aucun serveur, aucune donnée envoyée. La future sync cloud sera <strong>optionnelle</strong> et chiffrée.</p>
+      <summary><span data-i18n="faq.data.q">Mes données partent-elles quelque part ?</span> <svg class="chev"><use href="#i-chevron"/></svg></summary>
+      <p class="faq-answer" data-i18n-html="faq.data.a">Non. Tout est 100 % local : tes sessions sont stockées en fichiers JSON sur ta machine. Aucun compte, aucun serveur, aucune donnée envoyée. La future sync cloud sera <strong>optionnelle</strong> et chiffrée.</p>
     </details>
 
     <details class="faq-item reveal">
-      <summary>Mon antivirus risque-t-il de le bloquer ? <svg class="chev"><use href="#i-chevron"/></svg></summary>
-      <p class="faq-answer">Les exécutables packagés déclenchent parfois des faux positifs. On limite le risque au maximum : comportement de l'app documenté publiquement, et <strong>signature numérique de l'installeur prévue</strong> dès les premières versions stables. Au premier lancement, Windows SmartScreen peut malgré tout afficher un avertissement — c'est le cas pour tout nouvel éditeur. Et comme l'app ne se connecte à aucun serveur, elle n'a aucune raison d'accéder au réseau.</p>
+      <summary><span data-i18n="faq.av.q">Mon antivirus risque-t-il de le bloquer ?</span> <svg class="chev"><use href="#i-chevron"/></svg></summary>
+      <p class="faq-answer" data-i18n-html="faq.av.a">Les exécutables packagés déclenchent parfois des faux positifs. Keeper n'est pour l'instant <strong>pas signé numériquement</strong> — la signature a un coût que je n'ai pas encore budgété pour cette v1 gratuite. Au premier lancement, Windows SmartScreen peut donc afficher un avertissement : c'est le cas pour tout éditeur non signé, pas un signe que l'app est dangereuse. Le comportement de l'app est documenté publiquement, et comme elle ne se connecte à aucun serveur, elle n'a de toute façon aucune raison d'accéder au réseau.</p>
     </details>
 
     <details class="faq-item reveal">
-      <summary>Et mes onglets de navigateur ? <svg class="chev"><use href="#i-chevron"/></svg></summary>
-      <p class="faq-answer">Keeper relance ton navigateur — qui restaure ses onglets lui-même, comme il le fait déjà après un redémarrage. Pas besoin que Keeper s'en mêle : tous les navigateurs modernes le gèrent nativement, et mieux que nous ne le ferions.</p>
+      <summary><span data-i18n="faq.tabs.q">Et mes onglets de navigateur ?</span> <svg class="chev"><use href="#i-chevron"/></svg></summary>
+      <p class="faq-answer" data-i18n="faq.tabs.a">Keeper relance ton navigateur — qui restaure ses onglets lui-même, comme il le fait déjà après un redémarrage. Pas besoin que Keeper s'en mêle : tous les navigateurs modernes le gèrent nativement, et mieux que nous ne le ferions.</p>
     </details>
 
     <details class="faq-item reveal">
-      <summary>Ça marche sur Mac ou Linux ? <svg class="chev"><use href="#i-chevron"/></svg></summary>
-      <p class="faq-answer">Pas pour l'instant. Keeper cible Windows 10 et 11, où le besoin est le moins bien couvert. Une version multiplateforme n'est pas exclue à terme.</p>
+      <summary><span data-i18n="faq.platform.q">Ça marche sur Mac ou Linux ?</span> <svg class="chev"><use href="#i-chevron"/></svg></summary>
+      <p class="faq-answer" data-i18n="faq.platform.a">Pas pour l'instant. Keeper cible Windows 10 et 11, où le besoin est le moins bien couvert. Une version multiplateforme n'est pas exclue à terme.</p>
     </details>
 
     <!-- Question libre : même endpoint Formspree que la waitlist, champ `question` en plus -->
     <div class="faq-ask reveal" id="faqAsk">
-      <p class="faq-ask-title">Ta question n'est pas dans la liste ?</p>
-      <p class="faq-ask-sub">Pose-la, on te répond directement par email.</p>
+      <p class="faq-ask-title" data-i18n="faq.ask.title">Ta question n'est pas dans la liste ?</p>
+      <p class="faq-ask-sub" data-i18n="faq.ask.sub">Pose-la, on te répond directement par email.</p>
 
       <button class="faq-ask-btn" id="faqAskBtn" type="button">
         <svg aria-hidden="true"><use href="#i-chat"/></svg>
-        Poser ma question
+        <span data-i18n="faq.ask.btn">Poser ma question</span>
       </button>
 
       <div class="faq-ask-form">
-        <textarea class="faq-ask-field" id="faqAskText" placeholder="Ta question…" aria-label="Ta question"></textarea>
-        <input class="faq-ask-field" type="email" id="faqAskEmail" placeholder="ton@email.com" aria-label="Ton adresse email" autocomplete="email">
+        <textarea class="faq-ask-field" id="faqAskText" placeholder="Ta question…" aria-label="Ta question" data-i18n-placeholder="faq.ask.textPlaceholder" data-i18n-aria-label="faq.ask.textAria"></textarea>
+        <input class="faq-ask-field" type="email" id="faqAskEmail" placeholder="ton@email.com" aria-label="Ton adresse email" autocomplete="email" data-i18n-placeholder="form.emailPlaceholder" data-i18n-aria-label="form.emailAria">
         <!-- Consentement RGPD (T4) : non pré-coché, requis. Le JS bloque l'envoi sans coche. -->
         <label class="consent-check" for="faqAskConsent">
           <input type="checkbox" id="faqAskConsent" required>
-          <span>J'accepte que mon email soit utilisé pour me répondre (voir la <a href="privacy.html">politique de confidentialité</a>).</span>
+          <span data-i18n-html="faq.ask.consent">J'accepte que mon email soit utilisé pour me répondre (voir la <a href="privacy.html">politique de confidentialité</a>).</span>
         </label>
-        <button class="faq-ask-send" id="faqAskSend" type="button">Envoyer ma question</button>
-        <p class="faq-ask-note">Ton email ne sert qu'à te répondre. Rien d'autre.</p>
+        <button class="faq-ask-send" id="faqAskSend" type="button" data-i18n="faq.ask.send">Envoyer ma question</button>
+        <p class="faq-ask-note" data-i18n="faq.ask.note">Ton email ne sert qu'à te répondre. Rien d'autre.</p>
       </div>
 
       <div class="faq-ask-success" role="status" aria-live="polite">
         <svg><use href="#i-check"/></svg>
-        Question reçue ! On te répond très vite.
+        <span data-i18n="faq.ask.success">Question reçue ! On te répond très vite.</span>
       </div>
     </div>
   </section>
@@ -2554,9 +2615,9 @@
 
   <!-- ════ BOTTOM CTA ════ -->
   <div class="cta-section reveal">
-    <h2>Rends le redémarrage une habitude.</h2>
-    <p>Bientôt sur Windows 10 et 11. Laisse ton email, on te prévient au lancement.</p>
-    <a href="#sync" class="btn-primary" style="font-size:15px; padding:13px 30px;">Être prévenu au lancement</a>
+    <h2 data-i18n="cta.h2">Rends le redémarrage une habitude.</h2>
+    <p data-i18n="cta.p">Disponible maintenant sur Windows 10 et 11. Gratuit, sans compte.</p>
+    <a href="https://github.com/enzbaz/Keeper-Web-Page/releases/latest/download/Keeper-Setup.exe" class="btn-primary" style="font-size:15px; padding:13px 30px;" data-i18n="cta.btn">Télécharger Keeper</a>
   </div>
 
 
@@ -2574,16 +2635,361 @@
       <span class="footer-copy">© 2026 Keeper</span>
     </div>
     <div class="footer-links">
-      <a href="#compare">Comparatif</a>
+      <a href="#compare" data-i18n="footer.compare">Comparatif</a>
       <a href="#faq">FAQ</a>
       <a href="#sync">Sync</a>
-      <a href="#sync">Être prévenu</a>
-      <a href="privacy.html">Confidentialité</a>
+      <a href="https://github.com/enzbaz/Keeper-Web-Page/releases/latest/download/Keeper-Setup.exe" data-i18n="nav.download">Télécharger</a>
+      <a href="privacy.html" data-i18n="footer.privacy">Confidentialité</a>
     </div>
   </footer>
 
 
   <script>
+    /* ══════════════════════════════════════════════
+       0) I18N — FR / EN
+       Pas de serveur ni de géo-IP possible pour un fichier statique : on détecte
+       la langue du navigateur (navigator.language), avec un bouton de bascule
+       manuelle dont le choix est mémorisé (localStorage) et prime sur la détection.
+       Chaque texte traduit vit sur son élément via data-i18n (textContent),
+       data-i18n-html (innerHTML — pour les passages avec <strong>/<em>/<a>),
+       data-i18n-placeholder et data-i18n-aria-label.
+    ══════════════════════════════════════════════ */
+    const LANDING_I18N = {
+      fr: {
+        'nav.demo': 'Démo',
+        'nav.features': 'Fonctionnalités',
+        'nav.how': 'Comment ça marche',
+        'nav.download': 'Télécharger',
+
+        'hero.badge': `<span class="badge-dot" aria-hidden="true"></span> Windows 10 / 11 &nbsp;·&nbsp; Gratuit &nbsp;·&nbsp; 100 % local`,
+        'hero.h1': `<span class="hw">Redémarre</span> <span class="hw">ton</span> <span class="hw">PC</span><br><span class="hw">sans</span> <span class="hw">perdre</span> <span class="hw"><em>le fil</em></span>`,
+        'hero.sub': `Keeper capture toutes tes fenêtres ouvertes et leurs positions, au moment précis où tu fermes. Un clic pour fermer, un clic pour tout retrouver.`,
+        'hero.cta1': 'Télécharger pour Windows',
+        'hero.cta2': 'Voir la démo',
+        'hero.shotAria': `Aperçu de l'application Keeper avec ses sessions sauvegardées`,
+
+        'mock.session1.name': 'Travail mardi soir',
+        'mock.session1.meta': "Aujourd'hui, 22:30 · 4 applications",
+        'mock.session2.meta': 'Hier, 18:12 · 3 applications',
+        'mock.session3.name': 'Finances Q2',
+        'mock.session3.meta': 'Lundi, 11:45 · 2 applications',
+        'mock.chromeTitle': 'Chrome — 23 onglets',
+        'mock.noteLine': 'Finir le bug 42 — revoir le timeout WM_CLOSE',
+
+        'marquee.label': 'Conçu pour ton setup',
+
+        'demo.eyebrow': 'En action',
+        'demo.h2': 'Un clic. Tout revient.',
+        'demo.sub': `Clique sur <strong style="color:var(--green-h)">Save&nbsp;&amp;&nbsp;Close</strong> pour <strong>sauvegarder tes fenêtres</strong> ouvertes à l'écran et les <strong>fermer en un clic</strong>. Clique sur <strong style="color:var(--green-h)">Restore</strong> : Keeper rouvre toutes tes applications à leur place exacte.`,
+        'demo.screenAria': `Démonstration : un bureau Windows dont les fenêtres s'ouvrent au clic sur Restore`,
+        'demo.deskHint': 'Bureau vide — clique sur « Restore »',
+        'demo.toast': '✓ Session sauvegardée',
+        'demo.guideClose': '① Clique sur «&nbsp;Save&nbsp;&amp;&nbsp;Close&nbsp;» pour tout fermer',
+        'demo.guideRestore': '② Maintenant, clique sur «&nbsp;Restore&nbsp;» pour tout rouvrir',
+
+        'feat.power.tag': 'Extinction en 1 clic',
+        'feat.power.h3': 'Sauvegarde, ferme,<br>éteint. Un seul bouton.',
+        'feat.power.p': `Fini le PC laissé en veille par flemme. Keeper sauvegarde ta session, ferme proprement toutes tes apps et éteint la machine — d'un seul geste.`,
+        'feat.power.off': 'PC éteint',
+        'feat.power.btnAria': 'Éteindre le PC (démonstration)',
+        'feat.power.hint': 'Clique pour éteindre',
+
+        'feat.place.tag': 'Placement exact',
+        'feat.place.h3': 'Chaque fenêtre<br>à sa place. Au pixel près.',
+        'feat.place.p': `Keeper mémorise la position et la taille de chaque fenêtre, écran par écran. À la restauration, tout est repositionné exactement — et recentré intelligemment si ton setup d'écrans a changé.`,
+
+        'feat.tpl.tag': 'Templates partagés',
+        'feat.tpl.h3': 'Une config prête.<br>Partagée en un fichier.',
+        'feat.tpl.p': `Tu pourras exporter une session type — les bonnes apps, déjà positionnées — en un fichier. Partage-le, chacun l'importera et démarrera pareil.`,
+
+        'badge.soon': 'Bientôt',
+
+        'feat.notes.tag': 'Notes de session',
+        'feat.notes.h3': 'Une pensée avant de fermer ?<br>Note-la.',
+        'feat.notes.p': `Attache un mémo ou des notes à chaque session. Au moment de reprendre, tu retrouves le contexte exact : où tu en étais, quoi faire ensuite.`,
+
+        'compare.eyebrow': 'Comparaison',
+        'compare.h2': 'Pourquoi Keeper ?',
+        'compare.sub': `Le marché Windows est bloqué sur des outils datés ou abandonnés. Keeper est le seul à cocher toutes les cases.`,
+        'compare.r1.feat': 'Capture ce qui est réellement ouvert au moment T',
+        'compare.r1.c1': 'Template pré-défini',
+        'compare.r1.c2': 'Profil pré-défini',
+        'compare.r1.c3': 'Partiel',
+        'compare.r1.keeper': 'Snapshot',
+        'compare.r2.feat': 'Ferme proprement toutes les apps',
+        'compare.r3.feat': 'Éteint le PC dans la foulée',
+        'compare.r4.feat': 'Note de contexte attachée à la session',
+        'compare.r5.feat': 'Alerte si travail non sauvegardé',
+        'compare.r6.feat': 'Snapshot auto avant un update Windows',
+        'compare.r7.feat': '100 % local, aucun compte',
+        'compare.r7.c2': 'Compte requis',
+        'compare.r8.feat': 'Prix',
+        'compare.r8.c1': 'Gratuit',
+        'compare.r8.c2': '~20 $/an',
+        'compare.r8.c3': 'Inclus',
+        'compare.r8.keeper': 'Gratuit',
+
+        'how.eyebrow': 'Comment ça marche',
+        'how.h2': 'Simple comme bonjour.',
+        'how.step1.title': 'Sauvegarde ta session',
+        'how.step1.desc': `Clique sur « Save & Close ». Keeper capture toutes tes fenêtres et leurs positions, puis ferme tout proprement.`,
+        'how.step2.title': 'Éteins ou redémarre',
+        'how.step2.desc': `Coupe vraiment ta machine — plus besoin de la laisser en veille. Ton contexte de travail est en sécurité, stocké en local.`,
+        'how.step3.title': 'Rouvre tout en un clic',
+        'how.step3.desc': `Une fois ton PC redémarré, tu relances Keeper et cliques sur « Restore » : l'ensemble de tes fenêtres revient à sa position exacte. Ton environnement de travail, intact.`,
+
+        'wl.h2': 'Sync multi-PC',
+        'wl.p': `Retrouve tes sessions sur tous tes postes, automatiquement. On construit la synchro cloud (chiffrée, optionnelle) — laisse ton email pour être prévenu au lancement.`,
+        'wl.btn': 'Rejoindre la waitlist',
+        'wl.consent': `J'accepte que mon email soit utilisé pour m'informer du lancement de la sync multi-PC (voir la <a href="privacy.html">politique de confidentialité</a>).`,
+        'wl.note': 'Zéro spam. Un seul email, au lancement de la sync.',
+        'wl.success': 'Merci ! Tu seras prévenu·e dès que la sync est prête.',
+
+        'form.emailPlaceholder': 'ton@email.com',
+        'form.emailAria': 'Ton adresse email',
+        'form.emailInvalid': 'Adresse email invalide',
+        'form.networkError': 'Erreur réseau — réessaie',
+
+        'faq.h2': `Les questions qu'on nous pose.`,
+        'faq.free.q': 'Keeper est-il vraiment gratuit ?',
+        'faq.free.a': `Oui. Keeper est entièrement gratuit : tu le télécharges et tu l'utilises sans limite, sans compte. Une option payante <strong>Sync multi-PC</strong> arrivera plus tard, mais tout le cœur de l'app reste gratuit.`,
+        'faq.data.q': 'Mes données partent-elles quelque part ?',
+        'faq.data.a': `Non. Tout est 100 % local : tes sessions sont stockées en fichiers JSON sur ta machine. Aucun compte, aucun serveur, aucune donnée envoyée. La future sync cloud sera <strong>optionnelle</strong> et chiffrée.`,
+        'faq.av.q': 'Mon antivirus risque-t-il de le bloquer ?',
+        'faq.av.a': `Les exécutables packagés déclenchent parfois des faux positifs. Keeper n'est pour l'instant <strong>pas signé numériquement</strong> — la signature a un coût que je n'ai pas encore budgété pour cette v1 gratuite. Au premier lancement, Windows SmartScreen peut donc afficher un avertissement : c'est le cas pour tout éditeur non signé, pas un signe que l'app est dangereuse. Le comportement de l'app est documenté publiquement, et comme elle ne se connecte à aucun serveur, elle n'a de toute façon aucune raison d'accéder au réseau.`,
+        'faq.tabs.q': 'Et mes onglets de navigateur ?',
+        'faq.tabs.a': `Keeper relance ton navigateur — qui restaure ses onglets lui-même, comme il le fait déjà après un redémarrage. Pas besoin que Keeper s'en mêle : tous les navigateurs modernes le gèrent nativement, et mieux que nous ne le ferions.`,
+        'faq.platform.q': 'Ça marche sur Mac ou Linux ?',
+        'faq.platform.a': `Pas pour l'instant. Keeper cible Windows 10 et 11, où le besoin est le moins bien couvert. Une version multiplateforme n'est pas exclue à terme.`,
+        'faq.ask.title': `Ta question n'est pas dans la liste ?`,
+        'faq.ask.sub': 'Pose-la, on te répond directement par email.',
+        'faq.ask.btn': 'Poser ma question',
+        'faq.ask.textPlaceholder': 'Ta question…',
+        'faq.ask.textAria': 'Ta question',
+        'faq.ask.consent': `J'accepte que mon email soit utilisé pour me répondre (voir la <a href="privacy.html">politique de confidentialité</a>).`,
+        'faq.ask.send': 'Envoyer ma question',
+        'faq.ask.sending': 'Envoi…',
+        'faq.ask.retry': 'Réessayer',
+        'faq.ask.note': `Ton email ne sert qu'à te répondre. Rien d'autre.`,
+        'faq.ask.success': 'Question reçue ! On te répond très vite.',
+
+        'cta.h2': 'Rends le redémarrage une habitude.',
+        'cta.p': 'Disponible maintenant sur Windows 10 et 11. Gratuit, sans compte.',
+        'cta.btn': 'Télécharger Keeper',
+
+        'footer.compare': 'Comparatif',
+        'footer.privacy': 'Confidentialité',
+
+        'meta.title': 'Keeper — Sauvegarde et restaure ton environnement de travail Windows',
+        'meta.description': `Keeper capture toutes tes fenêtres ouvertes et leurs positions, puis les restaure en un clic après un redémarrage. Gratuit, 100 % local, aucune donnée envoyée. Windows 10/11.`,
+      },
+      en: {
+        'nav.demo': 'Demo',
+        'nav.features': 'Features',
+        'nav.how': 'How it works',
+        'nav.download': 'Download',
+
+        'hero.badge': `<span class="badge-dot" aria-hidden="true"></span> Windows 10 / 11 &nbsp;·&nbsp; Free &nbsp;·&nbsp; 100% local`,
+        'hero.h1': `<span class="hw">Restart</span> <span class="hw">your</span> <span class="hw">PC</span><br><span class="hw">without</span> <span class="hw">losing</span> <span class="hw"><em>the thread</em></span>`,
+        'hero.sub': `Keeper captures every open window and its position, right when you close it. One click to close, one click to get it all back.`,
+        'hero.cta1': 'Download for Windows',
+        'hero.cta2': 'Watch the demo',
+        'hero.shotAria': `Preview of the Keeper app showing saved sessions`,
+
+        'mock.session1.name': 'Tuesday night work',
+        'mock.session1.meta': 'Today, 10:30 PM · 4 apps',
+        'mock.session2.meta': 'Yesterday, 6:12 PM · 3 apps',
+        'mock.session3.name': 'Q2 finances',
+        'mock.session3.meta': 'Monday, 11:45 AM · 2 apps',
+        'mock.chromeTitle': 'Chrome — 23 tabs',
+        'mock.noteLine': 'Finish bug 42 — review the WM_CLOSE timeout',
+
+        'marquee.label': 'Built for your setup',
+
+        'demo.eyebrow': 'In action',
+        'demo.h2': `One click. Everything's back.`,
+        'demo.sub': `Click <strong style="color:var(--green-h)">Save&nbsp;&amp;&nbsp;Close</strong> to <strong>save your open windows</strong> and <strong>close them in one click</strong>. Click <strong style="color:var(--green-h)">Restore</strong>: Keeper reopens every app right where it was.`,
+        'demo.screenAria': `Demo: a Windows desktop whose windows open when you click Restore`,
+        'demo.deskHint': 'Empty desktop — click "Restore"',
+        'demo.toast': '✓ Session saved',
+        'demo.guideClose': '① Click «&nbsp;Save&nbsp;&amp;&nbsp;Close&nbsp;» to close everything',
+        'demo.guideRestore': '② Now click «&nbsp;Restore&nbsp;» to reopen everything',
+
+        'feat.power.tag': 'Shutdown in 1 click',
+        'feat.power.h3': 'Saves, closes,<br>shuts down. One button.',
+        'feat.power.p': `No more PCs left asleep out of laziness. Keeper saves your session, closes every app cleanly, and shuts down the machine — in one move.`,
+        'feat.power.off': 'PC off',
+        'feat.power.btnAria': 'Shut down the PC (demo)',
+        'feat.power.hint': 'Click to shut down',
+
+        'feat.place.tag': 'Exact placement',
+        'feat.place.h3': 'Every window<br>right back in place.',
+        'feat.place.p': `Keeper remembers the position and size of every window, screen by screen. On restore, everything is placed back exactly — and re-centered smartly if your screen setup has changed.`,
+
+        'feat.tpl.tag': 'Shared templates',
+        'feat.tpl.h3': 'One ready-made setup.<br>Shared as a single file.',
+        'feat.tpl.p': `You'll be able to export a template session — the right apps, already positioned — as a single file. Share it, and everyone can import it and start the same way.`,
+
+        'badge.soon': 'Coming soon',
+
+        'feat.notes.tag': 'Session notes',
+        'feat.notes.h3': 'A thought before you close?<br>Write it down.',
+        'feat.notes.p': `Attach a memo or notes to any session. When you pick it back up, you get the exact context: where you left off, what to do next.`,
+
+        'compare.eyebrow': 'Comparison',
+        'compare.h2': 'Why Keeper?',
+        'compare.sub': `The Windows market is stuck with dated or abandoned tools. Keeper is the only one that checks every box.`,
+        'compare.r1.feat': `Captures what's actually open at that moment`,
+        'compare.r1.c1': 'Pre-defined template',
+        'compare.r1.c2': 'Pre-defined profile',
+        'compare.r1.c3': 'Partial',
+        'compare.r1.keeper': 'Snapshot',
+        'compare.r2.feat': 'Closes every app cleanly',
+        'compare.r3.feat': 'Shuts down the PC right after',
+        'compare.r4.feat': 'Context note attached to the session',
+        'compare.r5.feat': 'Warns about unsaved work',
+        'compare.r6.feat': 'Auto snapshot before a Windows update',
+        'compare.r7.feat': '100% local, no account',
+        'compare.r7.c2': 'Account required',
+        'compare.r8.feat': 'Price',
+        'compare.r8.c1': 'Free',
+        'compare.r8.c2': '~$20/yr',
+        'compare.r8.c3': 'Included',
+        'compare.r8.keeper': 'Free',
+
+        'how.eyebrow': 'How it works',
+        'how.h2': 'Simple as that.',
+        'how.step1.title': 'Save your session',
+        'how.step1.desc': `Click "Save & Close". Keeper captures every window and its position, then closes everything cleanly.`,
+        'how.step2.title': 'Shut down or restart',
+        'how.step2.desc': `Actually turn off your machine — no more leaving it asleep. Your work context is safe, stored locally.`,
+        'how.step3.title': 'Reopen everything in one click',
+        'how.step3.desc': `Once your PC is back on, launch Keeper and click "Restore": every window returns to its exact position. Your whole work environment, intact.`,
+
+        'wl.h2': 'Multi-PC sync',
+        'wl.p': `Find your sessions on every machine, automatically. We're building encrypted, optional cloud sync — leave your email to be notified at launch.`,
+        'wl.btn': 'Join the waitlist',
+        'wl.consent': `I agree that my email will be used to notify me about the multi-PC sync launch (see the <a href="privacy.html">privacy policy</a>).`,
+        'wl.note': 'Zero spam. One email, when sync launches.',
+        'wl.success': `Thanks! We'll let you know as soon as sync is ready.`,
+
+        'form.emailPlaceholder': 'you@email.com',
+        'form.emailAria': 'Your email address',
+        'form.emailInvalid': 'Invalid email address',
+        'form.networkError': 'Network error — try again',
+
+        'faq.h2': 'Questions we get asked.',
+        'faq.free.q': 'Is Keeper really free?',
+        'faq.free.a': `Yes. Keeper is entirely free: you download it and use it without limits, without an account. A paid <strong>multi-PC sync</strong> option will arrive later, but the core of the app stays free.`,
+        'faq.data.q': 'Does my data go anywhere?',
+        'faq.data.a': `No. Everything is 100% local: your sessions are stored as JSON files on your machine. No account, no server, no data sent. The future cloud sync will be <strong>optional</strong> and encrypted.`,
+        'faq.av.q': 'Could my antivirus block it?',
+        'faq.av.a': `Packaged executables sometimes trigger false positives. Keeper isn't <strong>digitally signed</strong> yet — signing costs money I haven't budgeted for this free v1. On first launch, Windows SmartScreen may still show a warning: that's the case for any unsigned publisher, not a sign the app is dangerous. The app's behavior is publicly documented, and since it never connects to a server, it has no reason to touch the network anyway.`,
+        'faq.tabs.q': 'What about my browser tabs?',
+        'faq.tabs.a': `Keeper relaunches your browser — which restores its own tabs, just like it already does after a restart. No need for Keeper to get involved: every modern browser handles it natively, better than we would.`,
+        'faq.platform.q': 'Does it work on Mac or Linux?',
+        'faq.platform.a': `Not for now. Keeper targets Windows 10 and 11, where the need is least well served. A cross-platform version isn't ruled out down the line.`,
+        'faq.ask.title': `Don't see your question?`,
+        'faq.ask.sub': `Ask it — we'll reply straight to your inbox.`,
+        'faq.ask.btn': 'Ask my question',
+        'faq.ask.textPlaceholder': 'Your question…',
+        'faq.ask.textAria': 'Your question',
+        'faq.ask.consent': `I agree that my email will be used to reply to me (see the <a href="privacy.html">privacy policy</a>).`,
+        'faq.ask.send': 'Send my question',
+        'faq.ask.sending': 'Sending…',
+        'faq.ask.retry': 'Try again',
+        'faq.ask.note': 'Your email is only used to reply. Nothing else.',
+        'faq.ask.success': `Question received! We'll get back to you soon.`,
+
+        'cta.h2': 'Make restarting a habit.',
+        'cta.p': 'Available now for Windows 10 and 11. Free, no account.',
+        'cta.btn': 'Download Keeper',
+
+        'footer.compare': 'Comparison',
+        'footer.privacy': 'Privacy',
+
+        'meta.title': 'Keeper — Save and restore your Windows work environment',
+        'meta.description': `Keeper captures every open window and its position, then restores them in one click after a restart. Free, 100% local, no data sent. Windows 10/11.`,
+      },
+    };
+
+    const LANDING_LANG_KEY = 'keeperLandingLang';
+    let currentLandingLang = 'fr';
+    // État de la démo interactive (section 2 plus bas) : quel bouton on suggère de cliquer.
+    // Déclaré ici (et pas dans la section 2) pour que refreshDynamicLandingText() puisse
+    // s'en servir dès le tout premier appel, avant que la section 2 ne se soit exécutée.
+    let demoGuideSuggest = 'close';
+
+    function t(key) {
+      return LANDING_I18N[currentLandingLang][key] ?? LANDING_I18N.fr[key] ?? key;
+    }
+
+    // Re-rendu des textes que la section 2 pilote dynamiquement (pas de simple attribut
+    // data-i18n statique) : la requête DOM est refaite à chaque appel, donc sûre même
+    // avant que les `const` de la section 2 plus bas n'aient été initialisées.
+    function refreshDynamicLandingText() {
+      const guide = document.getElementById('demoGuide');
+      if (guide) guide.innerHTML = (demoGuideSuggest === 'restore') ? t('demo.guideRestore') : t('demo.guideClose');
+    }
+
+    function detectLandingLang() {
+      try {
+        const saved = localStorage.getItem(LANDING_LANG_KEY);
+        if (saved === 'fr' || saved === 'en') return saved;
+      } catch (e) { /* localStorage indisponible (navigation privée stricte) — on retombe sur la détection */ }
+      const nav = (navigator.language || navigator.languages?.[0] || 'en').toLowerCase();
+      return nav.startsWith('fr') ? 'fr' : 'en';
+    }
+
+    function applyLandingLang(lang) {
+      currentLandingLang = (lang === 'fr') ? 'fr' : 'en';
+      const dict = LANDING_I18N[currentLandingLang];
+      document.documentElement.lang = currentLandingLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key] !== undefined) el.placeholder = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.getAttribute('data-i18n-aria-label');
+        if (dict[key] !== undefined) el.setAttribute('aria-label', dict[key]);
+      });
+
+      document.title = dict['meta.title'];
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', dict['meta.description']);
+
+      // Le bouton affiche la langue VERS laquelle il bascule, pas la langue active
+      const toggle = document.getElementById('langToggle');
+      if (toggle) toggle.textContent = currentLandingLang === 'fr' ? 'EN' : 'FR';
+
+      // Re-rendu des textes gérés dynamiquement par le JS plus bas (pas des attributs statiques)
+      if (typeof refreshDynamicLandingText === 'function') refreshDynamicLandingText();
+    }
+
+    function setLandingLang(lang) {
+      try { localStorage.setItem(LANDING_LANG_KEY, lang); } catch (e) { /* best-effort */ }
+      applyLandingLang(lang);
+    }
+
+    applyLandingLang(detectLandingLang());
+
+    const langToggleBtn = document.getElementById('langToggle');
+    if (langToggleBtn) {
+      langToggleBtn.addEventListener('click', () => {
+        setLandingLang(currentLandingLang === 'fr' ? 'en' : 'fr');
+      });
+    }
+
+
     /* ══════════════════════════════════════════════
        1) SCROLL REVEAL
        Ajoute la classe .in aux éléments .reveal quand ils
@@ -2637,13 +3043,14 @@
 
     // Guidage de la séquence : on suggère quel bouton cliquer ensuite
     const demoGuide = document.getElementById('demoGuide');
+    // demoGuideSuggest est déclaré en section 0 (i18n) : refreshDynamicLandingText() en a besoin
+    // dès le tout premier rendu, avant que cette section ne se soit exécutée.
     function setSuggest(which) {
+      demoGuideSuggest = which;
       btnClose.classList.toggle('suggest', which === 'close');
       btnRestore.classList.toggle('suggest', which === 'restore');
       if (demoGuide) {
-        demoGuide.innerHTML = (which === 'close')
-          ? '① Clique sur «&nbsp;Save&nbsp;&amp;&nbsp;Close&nbsp;» pour tout fermer'
-          : '② Maintenant, clique sur «&nbsp;Restore&nbsp;» pour tout rouvrir';
+        demoGuide.innerHTML = (which === 'close') ? t('demo.guideClose') : t('demo.guideRestore');
       }
     }
     // Après Save & Close → on pointe vers Restore ; après Restore → on repointe vers Save & Close
@@ -2703,6 +3110,7 @@
     ══════════════════════════════════════════════ */
     const wlBtn   = document.getElementById('wlBtn');
     const wlEmail = document.getElementById('wlEmail');
+    const wlEmailError = document.getElementById('wlEmailError');
     if (wlBtn && wlEmail) {
       const section = wlBtn.closest('.waitlist');
       const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -2720,6 +3128,7 @@
         // On valide le format avant tout envoi pour éviter d'appeler l'endpoint pour rien
         if (!isValidEmail(email)) {
           wlEmail.style.borderColor = 'var(--red)';
+          if (wlEmailError) wlEmailError.classList.add('visible');
           wlEmail.focus();
           return;
         }
@@ -2744,12 +3153,15 @@
             // Échec réseau : on le signale au lieu de simuler un succès trompeur
             wlEmail.style.borderColor = 'var(--red)';
             wlEmail.value = '';
-            wlEmail.placeholder = 'Erreur réseau — réessaie';
+            wlEmail.placeholder = t('form.networkError');
           });
       };
       wlBtn.addEventListener('click', submit);
       wlEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
-      wlEmail.addEventListener('input', () => { wlEmail.style.borderColor = ''; });
+      wlEmail.addEventListener('input', () => {
+        wlEmail.style.borderColor = '';
+        if (wlEmailError) wlEmailError.classList.remove('visible');
+      });
       if (wlConsent) wlConsent.addEventListener('change', () => {
         if (wlConsentLabel) wlConsentLabel.classList.remove('consent-error');
       });
@@ -2811,15 +3223,15 @@
         data.append('consent', 'oui — ' + new Date().toISOString());
 
         faqAskSend.disabled = true;
-        faqAskSend.textContent = 'Envoi…';
+        faqAskSend.textContent = t('faq.ask.sending');
 
         fetch(ASK_ENDPOINT, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
           .then(() => faqAsk.classList.add('done'))
           .catch(() => {
             // Échec réseau : on le signale plutôt que de simuler un succès trompeur
             faqAskSend.disabled = false;
-            faqAskSend.textContent = 'Réessayer';
-            flagError(faqAskEmail, 'Erreur réseau — réessaie');
+            faqAskSend.textContent = t('faq.ask.retry');
+            flagError(faqAskEmail, t('form.networkError'));
           });
       };
 
