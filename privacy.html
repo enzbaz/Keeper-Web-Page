@@ -109,14 +109,15 @@
 </head>
 <body>
   <main class="wrap">
-    <a class="back" href="keeper-landing-v11_1.html">← Retour</a>
+    <a class="back" href="index.html">← Retour</a>
 
     <h1>Politique de confidentialité</h1>
-    <p class="updated">Dernière mise à jour : 13 juillet 2026</p>
+    <p class="updated">Dernière mise à jour : 3 août 2026</p>
 
     <p>
       Cette page décrit comment sont traitées les données que tu nous confies en laissant
-      ton adresse email sur ce site (waitlist de lancement, waitlist Sync, ou question libre).
+      ton adresse email sur ce site (waitlist de lancement, waitlist Sync, ou question libre),
+      ainsi que le <strong>compteur anonyme de téléchargements</strong> décrit plus bas.
       Elle est volontairement courte et sans jargon.
     </p>
 
@@ -127,11 +128,25 @@
     </p>
 
     <h2>Données collectées</h2>
+    <p><strong>Si tu laisses ton email</strong> (waitlist ou question) :</p>
     <ul>
       <li>ton <strong>adresse email</strong> ;</li>
       <li>le cas échéant, le <strong>texte de ta question</strong> (formulaire « poser une question ») ;</li>
       <li>l'<strong>horodatage</strong> de ta soumission et de ton consentement.</li>
     </ul>
+
+    <p><strong>Si tu cliques sur « Télécharger »</strong>, un compteur anonyme enregistre :</p>
+    <ul>
+      <li>la <strong>date et l'heure</strong> du clic ;</li>
+      <li>le <strong>pays</strong> d'où vient la visite (niveau pays uniquement, jamais la ville) ;</li>
+      <li>la <strong>page qui t'a amené·e ici</strong> (le « referrer »).</li>
+    </ul>
+    <p>
+      Ce compteur est <strong>agrégé et anonyme</strong> : ton <strong>adresse IP n'est ni
+      enregistrée ni conservée</strong>, aucun cookie n'est déposé, aucun identifiant ne t'est
+      attribué. Il est donc <strong>impossible de relier deux clics à la même personne</strong>,
+      ou de relier un clic à un email de la waitlist.
+    </p>
     <p>Aucune autre donnée n'est collectée : pas de cookie de suivi, pas de profilage, pas de revente.</p>
 
     <h2>Finalité</h2>
@@ -139,19 +154,35 @@
       Ton email sert <strong>uniquement</strong> à te tenir informé·e du lancement de Keeper et de
       la disponibilité de la synchronisation multi-PC. Rien d'autre.
     </p>
+    <p>
+      Le compteur de téléchargements sert <strong>uniquement</strong> à savoir combien de personnes
+      téléchargent Keeper et depuis quels pays, pour mesurer l'intérêt pour le projet. Il n'est
+      utilisé ni pour de la publicité, ni pour du ciblage.
+    </p>
 
     <h2>Base légale</h2>
     <p>
-      Ton <strong>consentement</strong> (article 6.1.a du RGPD), recueilli via la case à cocher du
-      formulaire. Tu peux le retirer à tout moment (voir « Tes droits »).
+      Pour ton email : ton <strong>consentement</strong> (article 6.1.a du RGPD), recueilli via la
+      case à cocher du formulaire. Tu peux le retirer à tout moment (voir « Tes droits »).
+    </p>
+    <p>
+      Pour le compteur de téléchargements : l'<strong>intérêt légitime</strong> (article 6.1.f du
+      RGPD) à mesurer l'audience du site. Comme la mesure est anonyme et sans cookie, elle ne
+      nécessite pas de consentement préalable.
     </p>
 
-    <h2>Hébergement et sous-traitant</h2>
+    <h2>Hébergement et sous-traitants</h2>
     <p>
-      Les soumissions sont traitées par <strong>Formspree Inc.</strong>, prestataire situé aux
-      <strong>États-Unis</strong>. Cela implique un transfert de ton email hors de l'Union
+      Les soumissions de formulaire sont traitées par <strong>Formspree Inc.</strong>, prestataire
+      situé aux <strong>États-Unis</strong>. Cela implique un transfert de ton email hors de l'Union
       européenne, encadré par les clauses contractuelles types (CCT) de Formspree. Ton email est
       transmis à Formspree au moment de l'envoi du formulaire.
+    </p>
+    <p>
+      Le compteur de téléchargements repose sur <strong>Cloudflare, Inc.</strong> : le clic passe
+      par un petit programme hébergé sur son réseau, qui incrémente le compteur puis te redirige
+      vers le fichier d'installation hébergé sur <strong>GitHub, Inc.</strong> Les données du
+      compteur (date, pays, referrer) sont stockées chez Cloudflare.
     </p>
 
     <h2>Durée de conservation</h2>
@@ -159,13 +190,18 @@
       Ton email est conservé jusqu'au lancement de Keeper, puis au maximum <strong>12 mois</strong>
       après, ou jusqu'au retrait de ton consentement si celui-ci intervient plus tôt.
     </p>
+    <p>
+      Les entrées du compteur de téléchargements sont conservées <strong>12 mois maximum</strong>,
+      puis supprimées automatiquement. Étant anonymes, elles ne peuvent pas faire l'objet d'une
+      demande d'accès ou de suppression individuelle (voir « Tes droits »).
+    </p>
 
     <h2>Tes droits</h2>
     <p>
       Conformément au RGPD, tu disposes des droits d'<strong>accès</strong>, de
       <strong>rectification</strong>, de <strong>suppression</strong>, de
       <strong>portabilité</strong> et de <strong>retrait du consentement</strong>. Il te suffit
-      d'écrire à <a href="mailto:support.app.keeper@gmail.com">support.app .keeper@gmail.com</a> ; ta
+      d'écrire à <a href="mailto:support.app.keeper@gmail.com">support.app.keeper@gmail.com</a> ; ta
       demande est traitée gratuitement. Tu peux aussi introduire une réclamation auprès de la
       <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.
     </p>
@@ -179,8 +215,9 @@
       <p>
         En toute transparence : ces fichiers de session contiennent des chemins de fichiers, des
         titres de fenêtres et tes notes, stockés <strong>en clair sur ton disque</strong>. Ils ne
-        quittent jamais ton ordinateur — la présente politique ne concerne donc que la waitlist
-        de ce site, pas l'usage de l'application.
+        quittent jamais ton ordinateur — la présente politique ne concerne donc que
+        <strong>ce site</strong> (waitlist et compteur de téléchargements), pas l'usage de
+        l'application.
       </p>
     </div>
 
