@@ -10,7 +10,7 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════════════
-       VARIANTE E — « Une nuit, en quatre actes »  (aperçu, hors production)
+       VARIANTE E — « Une nuit, en quatre actes »  (landing en production sur keeper-desk.com)
        Pas de photo, pas de laptop : l'écran lui-même est la scène, en HTML/CSS
        pur (net à toutes les échelles). Au chargement, six fenêtres se posent sur
        un écran incliné. Au scroll, l'écran se redresse, remplit la vue, et le
@@ -1042,7 +1042,7 @@
   <footer>
     <div class="foot">
       <span>© Keeper Desk</span>
-      <div class="foot-links"><a href="#compare" data-i18n="footer.compare">Comparatif</a><a href="../privacy.html" data-i18n="footer.privacy">Confidentialité</a></div>
+      <div class="foot-links"><a href="#compare" data-i18n="footer.compare">Comparatif</a><a href="privacy.html" data-i18n="footer.privacy">Confidentialité</a></div>
     </div>
   </footer>
 
@@ -1522,8 +1522,6 @@ var I18N_C = {"fr":{"compare.eyebrow":"Comparaison","compare.h2":"Pourquoi Keepe
         function onMove(e) { if (ST && ST.progress > 0.01) { rx(0); ry(0); return; } rx((0.5 - e.clientY / window.innerHeight) * 5); ry((e.clientX / window.innerWidth - 0.5) * 7); }
         if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) window.addEventListener('pointermove', onMove, { passive: true });
 
-        var m = /[?&]p=([0-9.]+)/.exec(location.search);   // aide de mise au point : ?p=0.45 → saute à 45 % du récit
-        if (m) window.addEventListener('load', function () { setTimeout(function () { window.scrollTo({ top: ST.start + (ST.end - ST.start) * parseFloat(m[1]), behavior: 'instant' }); }, 50); });
         return function () { window.removeEventListener('pointermove', onMove); root.classList.remove('js-cam'); ST = null; master = null; layout(); };
       });
 
